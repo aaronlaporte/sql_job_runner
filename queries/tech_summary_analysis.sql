@@ -1,0 +1,2 @@
+SELECT *
+FROM technology_risk_assessments
