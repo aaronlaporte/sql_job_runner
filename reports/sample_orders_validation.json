@@ -1,0 +1,81 @@
+{
+  "job_id": "sample_orders",
+  "output": "/Users/aaronlaporte/Documents/GitHub/sql_job_runner/exports/sample_orders.csv",
+  "timestamp": "2025-12-17T23:32:47.253217Z",
+  "pre_metrics": {
+    "row_count": 5601,
+    "column_count": 5,
+    "columns": {
+      "id": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 5601,
+        "sum": 63028053.0,
+        "min": 8453.0,
+        "max": 14053.0
+      },
+      "customer_name": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 6
+      },
+      "status": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 4
+      },
+      "order_total": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 4952,
+        "sum": 776304.66,
+        "min": 25.01,
+        "max": 249.97
+      },
+      "order_date": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 836
+      }
+    }
+  },
+  "post_metrics": {
+    "row_count": 5601,
+    "column_count": 5,
+    "columns": {
+      "id": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 5601,
+        "sum": 63028053.0,
+        "min": 8453.0,
+        "max": 14053.0
+      },
+      "customer_name": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 6
+      },
+      "status": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 4
+      },
+      "order_total": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 4952,
+        "sum": 776304.66,
+        "min": 25.01,
+        "max": 249.97
+      },
+      "order_date": {
+        "non_null": 5601,
+        "nulls": 0,
+        "unique": 836
+      }
+    }
+  },
+  "issues": [],
+  "passed": true
+}
