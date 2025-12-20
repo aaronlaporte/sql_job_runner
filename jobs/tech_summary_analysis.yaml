@@ -1,0 +1,24 @@
+job_id: tech_summary_analysis
+name: Technology Risk Summary
+description: Extracts technology risk assessments for a given window and creates CSV + markdown insights.
+enabled: true
+sql_file: queries/tech_summary_analysis.sql
+parameters:
+  start_date: 2024-01-01
+  end_date: 2024-03-31
+output:
+  format: csv
+  path: exports/tech_summary_analysis.csv
+post_process:
+  - plugin: markdown_summary
+    params:
+      destination: reports/tech_summary_analysis_summary.md
+      group_by: control_domain
+  - plugin: top_dimension_measure_combinations
+    params:
+      destination: reports/tech_summary_analysis_top_combos.md
+      top_n: 5
+      max_combination: 2
+validation:
+  enabled: true
+  path: reports/tech_summary_analysis_validation.json
