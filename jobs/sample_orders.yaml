@@ -1,0 +1,21 @@
+job_id: sample_orders
+name: Sample Orders Extract
+description: Pulls demo order data for the requested window and creates a CSV + markdown summary.
+enabled: true
+sql_file: queries/sample_orders.sql
+output:
+  format: csv
+  path: exports/sample_orders.csv
+post_process:
+  - plugin: markdown_summary
+    params:
+      destination: reports/sample_orders_summary.md
+      group_by: status
+  - plugin: top_dimension_measure_combinations
+    params:
+      destination: reports/sample_orders_top_combos.md
+      top_n: 5
+      max_combination: 2
+validation:
+  enabled: true
+  path: reports/sample_orders_validation.json
