@@ -1,9 +1,15 @@
-# Environment grouping
+# Env layout
 
-- `envs/clients/` stores base environment files per client. These contain real credentials, export/report roots, etc., and can exist even if the client has no scheduled jobs yet.
-- `envs/schedules/<window>/` holds schedule-specific wrappers. Each file references a base env via `BASE_ENV=clients/<client>.env` and lists the `JOBS` that should run in that window.
-- To onboard a client without scheduling them, create their base env under `envs/clients/` only. When ready to schedule, add a wrapper file under the appropriate `envs/schedules/<window>/` folder pointing to the base env.
-- Cron example (5 a.m. daily):
-  ```
-  0 5 * * * /bin/bash -lc "cd /path/sql_job_runner && ./scripts/run_scheduled_jobs.sh envs/schedules/5am"
-  ```
+- `envs/clients/<client>/<client>.env` – canonical base env per client (DATABASE_URL, EXPORT_ROOT, REPORT_ROOT, LOG_LEVEL, TZ).
+- `envs/clients/<client>/profile.md` and `connection_checklist.md` – optional intake notes that mirror the onboarding kit templates.
+- `envs/schedules/<window>/<client>.env` – schedule wrappers that set `BASE_ENV` plus a space-delimited `JOBS` list for that window.
+
+## Quick start
+
+1) Copy `envs/clients/client_template.env.example` to `envs/clients/<client>/<client>.env` and fill in real values.  
+2) Create a schedule wrapper like `envs/schedules/5am/<client>.env`:
+```
+BASE_ENV=clients/<client>/<client>.env
+JOBS="sample_orders another_job"
+```
+3) Cron example: `0 5 * * * /bin/bash -lc "cd /path/sql_job_runner && ./scripts/run_scheduled_jobs.sh envs/schedules/5am"`
