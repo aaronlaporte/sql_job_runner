@@ -51,7 +51,11 @@ def run_job(job_file: Path, renderer: SQLRenderer, db: DatabaseClient, only: set
         plugin = PLUGIN_REGISTRY.get(step.plugin)
         if not plugin:
             raise ValueError(f"Unknown plugin: {step.plugin}")
-        plugin(df.copy(), step.params)
+        params = step.params or {}
+        if params.get("enabled") is False:
+            print(f"  Post-process step '{step.plugin}' skipped (disabled)")
+            continue
+        plugin(df.copy(), params)
         print(f"  Post-process step '{step.plugin}' completed")
 
     validation_cfg = job.validation or ValidationConfig()

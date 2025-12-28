@@ -43,6 +43,7 @@ This guide explains how to add a new client to the SQL job runner and set up the
    - Update the `JOBS` list inside `envs/schedules/<window>/<client>.env` to include the new `job_id`.
 5. **Scheduled execution**
    - Cron (or any scheduler) continues to call `./scripts/run_scheduled_jobs.sh envs/schedules/<window>`; the script loads each wrapper, pulls in the referenced base env, and runs the specified jobs.
+    - Any `post_process` step can be temporarily disabled by adding `enabled: false` inside its `params` block (the runner skips those steps automatically).
 
 ## Notes
 

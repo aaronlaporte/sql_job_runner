@@ -1,0 +1,75 @@
+job_id: tech_risk_snapshot
+name: Technology Risk Snapshot
+description: Latest technology risk assessments with optional enrichment and distribution plugins.
+enabled: true
+sql_file: queries/tech_risk_snapshot.sql
+parameters:
+  start_date: 2023-01-01
+  end_date:
+  limit: 250
+output:
+  format: csv
+  path: exports/tech_risk_snapshot.csv
+post_process:
+  - plugin: markdown_summary
+    params:
+      destination: reports/tech_risk_snapshot_summary.md
+  - plugin: top_dimension_measure_combinations
+    params:
+      destination: reports/tech_risk_snapshot_top.md
+      top_n: 5
+      max_combination: 2
+  - plugin: zip_and_archive
+    params:
+      files:
+        - exports/tech_risk_snapshot.csv
+      destination: exports/archive/tech_risk_snapshot.zip
+  - plugin: data_quality_snapshot
+    params:
+      path: reports/tech_risk_snapshot_dq.json
+      thresholds:
+        row_count_pct: 50
+  - plugin: sftp_upload
+    params:
+      enabled: false
+      source: exports/tech_risk_snapshot.csv
+      host: sftp.example.com
+      username: demo_user
+      remote_path: /incoming/tech_risk_snapshot.csv
+      ssh_key: ~/.ssh/id_rsa
+  - plugin: load_to_database
+    params:
+      enabled: false
+      connection_string: sqlite:///data/demo.sqlite
+      table: tech_risk_snapshot_archive
+      if_exists: append
+  - plugin: s3_upload
+    params:
+      enabled: false
+      source: exports/tech_risk_snapshot.csv
+      bucket: demo-bucket
+      key: reports/tech_risk_snapshot.csv
+  - plugin: gcs_upload
+    params:
+      enabled: false
+      source: exports/tech_risk_snapshot.csv
+      bucket: demo-gcs-bucket
+      blob: reports/tech_risk_snapshot.csv
+  - plugin: email_report
+    params:
+      enabled: false
+      smtp_host: smtp.example.com
+      smtp_port: 587
+      sender: reports@example.com
+      recipients: ops@example.com
+      subject: Tech risk snapshot ready
+      attachments:
+        - exports/tech_risk_snapshot.csv
+  - plugin: slack_notification
+    params:
+      enabled: false
+      webhook_url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+      message: ":shield: Tech risk snapshot generated."
+validation:
+  enabled: true
+  path: reports/tech_risk_snapshot_validation.json
