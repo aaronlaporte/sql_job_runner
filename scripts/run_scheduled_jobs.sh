@@ -46,13 +46,21 @@ find "$env_path" -type f -name "*.env" -print0 | sort -z | while IFS= read -r -d
     # shellcheck disable=SC1090
     source "$env_file"
     if [[ -n "${BASE_ENV:-}" ]]; then
-      base_env_path="$ENV_ROOT/$BASE_ENV"
-      if [[ ! -f "$base_env_path" ]]; then
-        echo "Base env not found for $(basename "$env_file"): $base_env_path" >&2
+      # Allow BASE_ENV to be absolute or repo-relative (fallback to envs/)
+      base_env_candidate="$BASE_ENV"
+      if [[ "$BASE_ENV" != /* ]]; then
+        if [[ -f "$REPO_DIR/$BASE_ENV" ]]; then
+          base_env_candidate="$REPO_DIR/$BASE_ENV"
+        elif [[ -f "$ENV_ROOT/$BASE_ENV" ]]; then
+          base_env_candidate="$ENV_ROOT/$BASE_ENV"
+        fi
+      fi
+      if [[ ! -f "$base_env_candidate" ]]; then
+        echo "Base env not found for $(basename "$env_file"): $BASE_ENV (searched $REPO_DIR and $ENV_ROOT)" >&2
         exit 1
       fi
       # shellcheck disable=SC1090
-      source "$base_env_path"
+      source "$base_env_candidate"
       # Re-apply schedule overrides after loading base vars
       # shellcheck disable=SC1090
       source "$env_file"

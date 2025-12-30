@@ -16,4 +16,4 @@ This folder collects reference material and onboarding templates for `sql_job_ru
   - `client_connection_checklist.md`
   - `client_setup.md`
   - `README.md` (workflow walkthrough)
-- Client-specific documents live with their envs under `envs/clients/<client>/` (e.g., `envs/clients/nomadata/profile.md`).
+- Client-specific documents live with their envs under `envs/clients/<client>/`. The demo sandbox now lives in `../nomadata-clients/nomadata/` (symlinked under `envs/clients/nomadata/` for compatibility).
