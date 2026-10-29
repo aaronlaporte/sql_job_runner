@@ -6,3 +6,7 @@ __pycache__/
 .vscode/
 exports/archive/*.zip
 envs/.DS_Store
+
+# Local env files stay out of git; the *.example templates are tracked
+.env
+*.env
