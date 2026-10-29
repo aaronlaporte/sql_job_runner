@@ -1,4 +1,4 @@
-pandas
+pandas>=2,<3
 SQLAlchemy
 PyYAML
 python-dotenv
